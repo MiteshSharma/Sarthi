@@ -1,15 +1,27 @@
 {
 	"ImportPath": "github.com/MiteshSharma/Sarthi",
 	"GoVersion": "go1.5",
-	"GodepVersion": "v63",
+	"GodepVersion": "v74",
 	"Packages": [
-		"github.com/julienschmidt/httprouter"
+		"github.com/julienschmidt/httprouter",
+		"github.com/urfave/negroni",
+		"github.com/gorilla/context"
 	],
 	"Deps": [
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Comment": "v1.1-7-g08b5f42",
+			"Rev": "08b5f424b9271eedf6f9f0ce86cb9396ed337a42"
+		},
 		{
 			"ImportPath": "github.com/julienschmidt/httprouter",
 			"Comment": "v1.1-34-gd8ff598",
 			"Rev": "d8ff598a019f2c7bad0980917a588193cf26666e"
+		},
+		{
+			"ImportPath": "github.com/urfave/negroni",
+			"Comment": "v0.2.0-65-g3f7ce7b",
+			"Rev": "3f7ce7b928e14ff890b067e5bbbc80af73690a9c"
 		}
 	]
 }

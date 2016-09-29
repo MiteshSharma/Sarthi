@@ -2,11 +2,11 @@ package main
 
 import (
 	"flag"
-	"../creator/utils/"
-	"../creator/api/"
 	"os/signal"
 	"os"
 	"syscall"
+	"github.com/MiteshSharma/Sarthi/creator/utils"
+	"github.com/MiteshSharma/Sarthi/creator/api"
 )
 
 var configFileName string

@@ -1,3 +1,5 @@
 {
-
+  "ServerConfig" : {
+    "Port": ":8080"
+  }
 }
