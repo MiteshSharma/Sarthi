@@ -17,7 +17,7 @@ type Scheduler struct {
 func main() {
 	// start the scheduler
 	scheduler := Scheduler{
-		ping_interval: 10, // TODO externalize this setting, possibly read from command line param
+		ping_interval: 2, // TODO externalize this setting, possibly read from command line param
 	}
 	scheduler.Start()
 }
@@ -73,6 +73,13 @@ func sleepAndWork(duration time.Duration, ch chan<- bool) {
 }
 
 func (s *Scheduler) work() {
+	// defer recovery function
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recovering from error -> ", r)
+		}
+	}()
+
 	// get pending tasks
 	pending := dao.GetPendingTasks(time.Now().Unix())
 	fmt.Println(fmt.Sprintf("Got %d pending tasks.", len(pending)))

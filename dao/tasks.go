@@ -2,7 +2,10 @@ package dao
 
 import (
 	"fmt"
-	"time"
+
+	"gopkg.in/mgo.v2/bson"
+
+	"github.com/MiteshSharma/Sarthi/database"
 )
 
 // task states
@@ -11,37 +14,24 @@ const TASK_STATE_WAITING = "WAITING"
 const TASK_STATE_EXECUTING = "EXECUTING"
 const TASK_STATE_COMPLETED = "COMPLETED"
 
-// task
-type Task struct {
-	id               string
-	state            string
-	callback_url     string
-	callback_method  string
-	callback_payload string
-	schedule         string
-	scheduled_at     int64
-}
+const TASKS_TYPE = "tasks"
 
 func GetPendingTasks(timestamp int64) []Task {
 	fmt.Println(fmt.Sprintf("Getting pending tasks at %d.", timestamp))
-	// TODO get tasks from the db where scheduled_at < timestamp and state == SCHEDULED
-	tasks := []Task{
-		Task{
-			id:              "id1",
-			callback_url:    "http://google.com",
-			callback_method: "GET",
-			schedule:        "1234567890",
-			scheduled_at:    time.Now().Unix(),
-			state:           "SCHEDULED",
-		},
-		Task{
-			id:              "id2",
-			callback_url:    "http://google.com",
-			callback_method: "GET",
-			schedule:        "1234567890",
-			scheduled_at:    time.Now().Unix(),
-			state:           "SCHEDULED",
-		},
+	db := database.GetDatabaseManager()
+
+	fmt.Println(fmt.Sprintf("Getting tasks -> timestamp %v | state %v ", timestamp, TASK_STATE_SCHEDULED))
+	query := &bson.M{
+		"state":        TASK_STATE_SCHEDULED,
+		"scheduled_at": &bson.M{"$lte": timestamp},
 	}
-	return tasks
+
+	result := []Task{}
+	err := db.GetAllByQuery(TASKS_TYPE, query, &result)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return result
 }
