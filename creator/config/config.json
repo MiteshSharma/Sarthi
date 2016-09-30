@@ -1,5 +1,9 @@
 {
   "ServerConfig" : {
     "Port": ":8080"
+  },
+  "DatabaseConfig": {
+    "Host": "localhost",
+    "DbName": "sarthi"
   }
 }
