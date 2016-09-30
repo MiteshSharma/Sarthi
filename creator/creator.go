@@ -5,14 +5,13 @@ import (
 	"os/signal"
 	"os"
 	"syscall"
-	"github.com/MiteshSharma/Sarthi/creator/utils"
 	"github.com/MiteshSharma/Sarthi/creator/api"
+	"github.com/MiteshSharma/Sarthi/utils"
 )
 
 var configFileName string
 
 func main() {
-
 	parseCmdParams()
 
 	utils.LoadConfig(configFileName)
