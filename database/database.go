@@ -1,6 +1,10 @@
 package database
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/MiteshSharma/Sarthi/utils"
+)
 
 type DatabaseManager interface {
 	Create(docType string, doc interface{}) error
@@ -14,8 +18,6 @@ type DatabaseManager interface {
 }
 
 // TODO externalize this or move to common config file
-const HOST = "localhost"
-const DB_NAME = "sarthi"
 const FETCH_LIMIT = 1000
 
 var dbManager DatabaseManager
@@ -24,9 +26,10 @@ func GetDatabaseManager() DatabaseManager {
 	if dbManager != nil {
 		return dbManager
 	} else {
+		config := utils.ConfigParam.DatabaseConfig
 		dbManager, err := NewMongodbManager(map[string]string{
-			"host":    HOST,
-			"db_name": DB_NAME,
+			"host":    config.Host,
+			"db_name": config.DbName,
 		})
 		if err != nil {
 			fmt.Println("Error initializing database manager.")

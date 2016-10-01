@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/signal"
@@ -8,6 +9,7 @@ import (
 	"time"
 
 	"github.com/MiteshSharma/Sarthi/dao"
+	"github.com/MiteshSharma/Sarthi/utils"
 )
 
 type Scheduler struct {
@@ -15,16 +17,27 @@ type Scheduler struct {
 }
 
 func main() {
+	// read command line params
+	var config string
+	var ping_interval int
+	flag.StringVar(&config, "config", "config.json", "JSON configuration file.")
+	flag.IntVar(&ping_interval, "ping_interval", 10, "Pinging interval for scheduler in seconds.")
+	flag.Parse()
+
+	// load configuration file
+	utils.LoadConfig(config)
+
 	// start the scheduler
 	scheduler := Scheduler{
-		ping_interval: 2, // TODO externalize this setting, possibly read from command line param
+		ping_interval: (time.Duration(ping_interval) * time.Second),
 	}
+
 	scheduler.Start()
 }
 
 func (s *Scheduler) Start() {
 	// start up
-	fmt.Println(fmt.Sprintf("Starting scheduler with ping interval : %d seconds", s.ping_interval))
+	fmt.Println(fmt.Sprintf("Starting scheduler with ping interval : %v", s.ping_interval))
 
 	// channels and waitgroup to ensure clean exit
 	var wg sync.WaitGroup
@@ -67,8 +80,8 @@ func (s *Scheduler) Start() {
 }
 
 func sleepAndWork(duration time.Duration, ch chan<- bool) {
-	fmt.Println(fmt.Sprintf("Waiting for %d seconds.", duration))
-	<-time.After(duration * time.Second)
+	fmt.Println(fmt.Sprintf("Waiting for %v.", duration))
+	<-time.After(duration)
 	ch <- true
 }
 
