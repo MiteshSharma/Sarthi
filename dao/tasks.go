@@ -6,6 +6,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 
 	"github.com/MiteshSharma/Sarthi/database"
+	"errors"
 )
 
 // task states
@@ -34,4 +35,21 @@ func GetPendingTasks(timestamp int64) []Task {
 	}
 
 	return result
+}
+
+func CreateTask(task *Task) error {
+	db := database.GetDatabaseManager()
+	if err:= db.Create(TASKS_TYPE, task); err != nil {
+		return errors.New("Error occured during task creation.")
+	}
+	return nil
+}
+
+func GetTask(taskId string) (Task, error) {
+	task := Task{}
+	db := database.GetDatabaseManager()
+	if err:= db.Get(TASKS_TYPE, taskId, &task); err != nil {
+		return task, errors.New("Error occured during task creation.")
+	}
+	return task, nil
 }
