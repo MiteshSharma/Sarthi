@@ -5,8 +5,10 @@ import (
 
 	"gopkg.in/mgo.v2/bson"
 
-	"github.com/MiteshSharma/Sarthi/database"
 	"errors"
+
+	"github.com/MiteshSharma/Sarthi/database"
+	errorz "github.com/MiteshSharma/Sarthi/errors"
 )
 
 // task states
@@ -17,7 +19,7 @@ const TASK_STATE_COMPLETED = "COMPLETED"
 
 const TASKS_TYPE = "tasks"
 
-func GetPendingTasks(timestamp int64) []Task {
+func GetPendingTasks(timestamp int64) ([]Task, error) {
 	fmt.Println(fmt.Sprintf("Getting pending tasks at %d.", timestamp))
 	db := database.GetDatabaseManager()
 
@@ -28,28 +30,50 @@ func GetPendingTasks(timestamp int64) []Task {
 	}
 
 	result := []Task{}
-	err := db.GetAllByQuery(TASKS_TYPE, query, &result)
-
-	if err != nil {
-		panic(err)
+	if err := db.GetAllByQuery(TASKS_TYPE, query, &result); err != nil {
+		return result, err
 	}
 
-	return result
+	return result, nil
 }
 
 func CreateTask(task *Task) error {
 	db := database.GetDatabaseManager()
-	if err:= db.Create(TASKS_TYPE, task); err != nil {
+	if err := db.Create(TASKS_TYPE, task); err != nil {
 		return errors.New("Error occured during task creation.")
 	}
+
 	return nil
 }
 
 func GetTask(taskId string) (Task, error) {
 	task := Task{}
 	db := database.GetDatabaseManager()
-	if err:= db.Get(TASKS_TYPE, taskId, &task); err != nil {
+	if err := db.Get(TASKS_TYPE, taskId, &task); err != nil {
 		return task, errors.New("Error occured during task creation.")
 	}
+
 	return task, nil
+}
+
+func UpdateTaskState(task *Task, state string) error {
+	switch state {
+	// break for known cases
+	case TASK_STATE_WAITING:
+	case TASK_STATE_SCHEDULED:
+	case TASK_STATE_EXECUTING:
+	case TASK_STATE_COMPLETED:
+	default:
+		return &errorz.InvalidTaskStateError{
+			State: state,
+		}
+	}
+	task.State = state
+
+	db := database.GetDatabaseManager()
+	if err := db.Save(TASKS_TYPE, task.Id, task); err != nil {
+		return err
+	}
+
+	return nil
 }
