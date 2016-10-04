@@ -6,6 +6,7 @@ import (
 	"github.com/MiteshSharma/Sarthi/executor/reader"
 	"github.com/MiteshSharma/Sarthi/executor/logs"
 	"fmt"
+	"github.com/MiteshSharma/Sarthi/executor/work"
 )
 
 type Dispatcher struct  {
@@ -31,10 +32,11 @@ func (d *Dispatcher) Start()  {
 	}
 
 	go func() {
+		var work work.Work
 		for {
 			select {
-			case work:= <- reader.TaskQueue:
-				logs.Logger.Debug(fmt.Sprint("Work received by dispatcher to execute with id %s", work.Id))
+			case work = <- reader.TaskQueue:
+				logs.Logger.Debug(fmt.Sprint("Work received by dispatcher to execute with id ", work.GetId()))
 				go func() {
 					var worker worker.Worker = <-TaskWorkerQueue
 					worker.Work <- work

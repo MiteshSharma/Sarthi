@@ -16,6 +16,10 @@ type Task struct {
 	ScheduledAt     int64  `json:"scheduled_at" bson:"scheduled_at"`
 }
 
+func (t *Task) GetId() string {
+	return t.Id
+}
+
 func (t *Task) IsValid() error {
 	if t.CallbackUrl == "" {
 		return errors.New("Callback url not defined.")
