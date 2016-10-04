@@ -3,12 +3,13 @@ package main
 import (
 	"time"
 	"flag"
-	"github.com/MiteshSharma/Sarthi/utils"
 	"os"
 	"os/signal"
 	"syscall"
+	"github.com/MiteshSharma/Sarthi/utils"
 	"github.com/MiteshSharma/Sarthi/executor/reader"
 	"github.com/MiteshSharma/Sarthi/executor/dispatcher"
+	"github.com/MiteshSharma/Sarthi/executor/logs"
 )
 
 type Executor struct {
@@ -26,6 +27,8 @@ func main() {
 
 	// load configuration file
 	utils.LoadConfig(config)
+
+	logs.Logger = logs.NewExecutorLogger("Executor")
 
 	// start the scheduler
 	executor := Executor{
@@ -46,19 +49,25 @@ var Reader *reader.Reader
 var Dispatcher *dispatcher.Dispatcher
 
 func (e *Executor) Start() {
+	logs.Logger.Debug("Executor starting.")
 	// Start task reader
 	Reader = reader.NewReader(e.pingInterval)
 	Reader.Start()
+	logs.Logger.Debug("Started reader during executor start.")
 
 	// Start dispatcher, dispatcher will start needed workers
 	Dispatcher = dispatcher.NewDispatcher(e.numWorker)
 	Dispatcher.Start()
+	logs.Logger.Debug("Started dispatcher during executor start.")
+	logs.Logger.Debug("Executor started.")
 }
 
 func (e *Executor) Stop() {
+	logs.Logger.Debug("Executor stopping.")
 	// Stop task reader
 	Reader.Stop()
 
 	// Stop dispatcher
 	Dispatcher.Stop()
+	logs.Logger.Debug("Executor stopped.")
 }

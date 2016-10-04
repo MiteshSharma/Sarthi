@@ -3,6 +3,8 @@ package worker
 import (
 	"github.com/MiteshSharma/Sarthi/dao"
 	"time"
+	"github.com/MiteshSharma/Sarthi/executor/logs"
+	"fmt"
 )
 
 type Worker struct  {
@@ -28,7 +30,9 @@ func (w *Worker) Start()  {
 			w.WorkerQueue <- *w
 			select {
 			case task := <- w.Work:
+				logs.Logger.Debug(fmt.Sprint("Worker received work to execute with id %s", task.Id))
 				print("Task id is : "+task.Id)
+				task.Execute()
 				time.Sleep(1 * time.Second)
 			case <- w.Quit:
 				// Stop this worker

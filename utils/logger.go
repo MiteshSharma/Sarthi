@@ -5,7 +5,6 @@ package utils
 
 import (
 	"net/http"
-
 	"github.com/Sirupsen/logrus"
 )
 

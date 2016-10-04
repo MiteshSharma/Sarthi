@@ -1,6 +1,10 @@
 package dao
 
-import "errors"
+import (
+	"errors"
+	"net/http"
+	"strings"
+)
 
 type Task struct {
 	Id              string `json:"id" bson:"_id"`
@@ -20,4 +24,35 @@ func (t *Task) IsValid() error {
 		return errors.New("Schedule time is not specified.")
 	}
 	return nil
+}
+
+func (t *Task) Execute() {
+	task, error := GetTaskLock(t.Id)
+	// We found a task which means lock is acquired
+	if error == nil {
+		// This means task found and lock is acquired. Don't run it until lock is freed.
+		return
+	}
+
+	if err:= CreateTaskLock(&task); err != nil {
+		println(err.Error())
+	}
+
+	client := &http.Client{}
+	request, error := http.NewRequest(t.CallbackMethod, t.CallbackUrl, strings.NewReader(t.CallbackPayload))
+	if error != nil {
+		println("Ok we got paniced"+ error.Error())
+	}
+
+	response, error := client.Do(request)
+	if error != nil {
+		println("Error received during request: "+ error.Error())
+	} else {
+		println("Response received: "+response.Status)
+	}
+
+	if err:= DeleteTaskLock(task.Id); err != nil {
+		println(err.Error())
+	}
+
 }
