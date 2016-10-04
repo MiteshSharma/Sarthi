@@ -51,7 +51,7 @@ func createTasks(rw http.ResponseWriter, r *http.Request, ps httprouter.Params) 
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&tasks); err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
-		rw.Write([]byte(utils.ToJson("Incorrect request object received.")))
+		rw.Write([]byte(utils.ToJson("Incorrect tasks received.")))
 		return
 	}
 
