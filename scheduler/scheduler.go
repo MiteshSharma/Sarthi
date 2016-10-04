@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
@@ -9,6 +10,7 @@ import (
 	"time"
 
 	"github.com/MiteshSharma/Sarthi/dao"
+	"github.com/MiteshSharma/Sarthi/mq"
 	"github.com/MiteshSharma/Sarthi/utils"
 )
 
@@ -94,12 +96,26 @@ func (s *Scheduler) work() {
 	}()
 
 	// get pending tasks
-	pending := dao.GetPendingTasks(time.Now().Unix())
+	pending, err := dao.GetPendingTasks(time.Now().Unix())
+	if err != nil {
+		fmt.Println("Error fetching pending tasks.")
+		panic(err)
+	}
 	fmt.Println(fmt.Sprintf("Got %d pending tasks.", len(pending)))
+
+	mq_agent := mq.GetAgent()
 	for _, task := range pending {
 		fmt.Println(fmt.Sprintf("task -> %+v", task))
-		// TODO
+
 		// push for execution
+		msg, err := json.Marshal(task)
+		if err != nil {
+			fmt.Println("Error marshalling task -> ", err)
+			continue
+		}
+		mq_agent.Write(msg)
+
 		// update task state
+		dao.UpdateTaskState(&task, dao.TASK_STATE_WAITING)
 	}
 }

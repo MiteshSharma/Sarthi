@@ -5,5 +5,8 @@
   "DatabaseConfig": {
     "Host": "localhost",
     "DbName": "sarthi"
+  },
+  "Config" : {
+  	"mq" : "sqs"
   }
 }
