@@ -11,12 +11,14 @@ import (
 
 type Dispatcher struct  {
 	NumWorker int
+	workResponse chan reader.WorkResponse
 	Quit	chan bool
 }
 
-func NewDispatcher(numWorker int) *Dispatcher  {
+func NewDispatcher(numWorker int, communication chan reader.WorkResponse) *Dispatcher  {
 	dispatcher := &Dispatcher{
 		NumWorker: numWorker,
+		workResponse: communication,
 		Quit: make(chan bool)}
 	return dispatcher
 }
@@ -27,7 +29,7 @@ func (d *Dispatcher) Start()  {
 	TaskWorkerQueue = make(chan worker.Worker, d.NumWorker)
 
 	for count:= 0; count < d.NumWorker; count++ {
-		worker := worker.NewWorker(uuid.NewV4().String(), TaskWorkerQueue)
+		worker := worker.NewWorker(uuid.NewV4().String(), TaskWorkerQueue, d.workResponse)
 		worker.Start()
 	}
 

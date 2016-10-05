@@ -48,15 +48,18 @@ func main() {
 var Reader *reader.Reader
 var Dispatcher *dispatcher.Dispatcher
 
+var communicationChan chan reader.WorkResponse
+
 func (e *Executor) Start() {
 	logs.Logger.Debug("Executor starting.")
+	communicationChan = make(chan reader.WorkResponse)
 	// Start task reader
-	Reader = reader.NewReader(e.pingInterval)
+	Reader = reader.NewReader(e.pingInterval, communicationChan)
 	Reader.Start()
 	logs.Logger.Debug("Started reader during executor start.")
 
 	// Start dispatcher, dispatcher will start needed workers
-	Dispatcher = dispatcher.NewDispatcher(e.numWorker)
+	Dispatcher = dispatcher.NewDispatcher(e.numWorker, communicationChan)
 	Dispatcher.Start()
 	logs.Logger.Debug("Started dispatcher during executor start.")
 	logs.Logger.Debug("Executor started.")
