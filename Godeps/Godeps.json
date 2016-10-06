@@ -6,13 +6,51 @@
 		"github.com/julienschmidt/httprouter",
 		"github.com/urfave/negroni",
 		"github.com/gorilla/context",
-		"github.com/satori/go.uuid"
+		"github.com/satori/go.uuid",
+		"github.com/Sirupsen/logrus",
+		"github.com/aws/aws-sdk-go/aws",
+		"github.com/jmespath/go-jmespath"
 	],
 	"Deps": [
+		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.10.0-38-g3ec0642",
+			"Rev": "3ec0642a7fb6488f65b06f9040adc67e3990296a"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws",
+			"Comment": "v1.4.12-8-g5717392",
+			"Rev": "5717392a1fc0a2cc1e35b28eef3154ce318b18f4"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws/awserr",
+			"Comment": "v1.4.12-8-g5717392",
+			"Rev": "5717392a1fc0a2cc1e35b28eef3154ce318b18f4"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws/credentials",
+			"Comment": "v1.4.12-8-g5717392",
+			"Rev": "5717392a1fc0a2cc1e35b28eef3154ce318b18f4"
+		},
+		{
+			"ImportPath": "github.com/davecgh/go-spew/spew",
+			"Comment": "v1.0.0-3-g6d21280",
+			"Rev": "6d212800a42e8ab5c146b8ace3490ee17e5225f9"
+		},
+		{
+			"ImportPath": "github.com/go-ini/ini",
+			"Comment": "v1.21.1",
+			"Rev": "6e4869b434bd001f6983749881c7ead3545887d8"
+		},
 		{
 			"ImportPath": "github.com/gorilla/context",
 			"Comment": "v1.1-7-g08b5f42",
 			"Rev": "08b5f424b9271eedf6f9f0ce86cb9396ed337a42"
+		},
+		{
+			"ImportPath": "github.com/jmespath/go-jmespath",
+			"Comment": "0.2.2-14-gbd40a43",
+			"Rev": "bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d"
 		},
 		{
 			"ImportPath": "github.com/julienschmidt/httprouter",
@@ -20,14 +58,28 @@
 			"Rev": "d8ff598a019f2c7bad0980917a588193cf26666e"
 		},
 		{
+			"ImportPath": "github.com/pmezard/go-difflib/difflib",
+			"Comment": "v1.0.0",
+			"Rev": "792786c7400a136282c1664665ae0a8db921c6c2"
+		},
+		{
 			"ImportPath": "github.com/satori/go.uuid",
 			"Comment": "v1.1.0-6-gb061729",
 			"Rev": "b061729afc07e77a8aa4fad0a2fd840958f1942a"
 		},
 		{
+			"ImportPath": "github.com/stretchr/testify/assert",
+			"Comment": "v1.1.4-4-g976c720",
+			"Rev": "976c720a22c8eb4eb6a0b4348ad85ad12491a506"
+		},
+		{
 			"ImportPath": "github.com/urfave/negroni",
 			"Comment": "v0.2.0-65-g3f7ce7b",
 			"Rev": "3f7ce7b928e14ff890b067e5bbbc80af73690a9c"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "8d1157a435470616f975ff9bb013bea8d0962067"
 		}
 	]
 }

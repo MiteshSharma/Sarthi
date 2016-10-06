@@ -2,9 +2,9 @@ package reader
 
 import (
 	"time"
-	"github.com/MiteshSharma/Sarthi/dao"
 	"github.com/MiteshSharma/Sarthi/executor/logs"
 	"github.com/MiteshSharma/Sarthi/executor/work"
+	"github.com/MiteshSharma/Sarthi/executor/source"
 )
 
 type Reader struct  {
@@ -34,10 +34,16 @@ func (r *Reader) Start()  {
 			select {
 			case <-time.After(time.Second * 1):
 				logs.Logger.Debug("Reading data from message queue.")
+				source := source.GetSource()
 				// Fetch task from queue
 				var work work.Work
-				work = &dao.Task{Id: "123", CallbackUrl: "https://www.google.com", CallbackMethod: "GET"}
-				TaskQueue <- work
+				work = source.Get()
+				if (work.GetId() != "") {
+					TaskQueue <- work
+				} else {
+					logs.Logger.Debug("No message found to execute in reader.")
+				}
+				//work = &dao.Task{Id: "123", CallbackUrl: "https://www.google.com", CallbackMethod: "GET"}
 			case taskResponse:= <-r.response:
 				logs.Logger.Debug("Response of task received with id : "+taskResponse.Work.GetId())
 			}
