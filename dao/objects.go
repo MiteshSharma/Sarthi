@@ -30,13 +30,15 @@ func (t *Task) IsValid() error {
 	return nil
 }
 
-func (t *Task) Execute() {
+func (t *Task) Execute() bool {
 	task, error := GetTaskLock(t.Id)
 	// We found a task which means lock is acquired
 	if error == nil {
 		// This means task found and lock is acquired. Don't run it until lock is freed.
-		return
+		return false
 	}
+
+	isSuccess := true
 
 	if err:= CreateTaskLock(&task); err != nil {
 		println(err.Error())
@@ -51,12 +53,14 @@ func (t *Task) Execute() {
 	response, error := client.Do(request)
 	if error != nil {
 		println("Error received during request: "+ error.Error())
+		isSuccess = false
 	} else {
 		println("Response received: "+response.Status)
+		isSuccess = true
 	}
 
 	if err:= DeleteTaskLock(task.Id); err != nil {
 		println(err.Error())
 	}
-
+	return isSuccess
 }
