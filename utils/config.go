@@ -9,7 +9,7 @@ import (
 type Config struct {
 	ServerConfig   ServerConfig
 	DatabaseConfig DatabaseConfig
-	Config         map[string]interface{}
+	ExecutorConfig map[string]interface{}
 }
 
 type ServerConfig struct {

@@ -6,7 +6,12 @@
     "Host": "localhost",
     "DbName": "sarthi"
   },
-  "Config" : {
-  	"mq" : "sqs"
+  "ExecutorConfig" : {
+  	"mq" : "sqs",
+    "sqs" : {
+      "queue-url" : "https://sqs.ap-southeast-1.amazonaws.com/791579073412/SarthiTasks",
+      "visibility-timeout" : 60,
+      "region" : "ap-southeast-1"
+    }
   }
 }

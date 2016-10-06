@@ -8,8 +8,14 @@ import (
 )
 
 type MqAgent interface {
-	Read() []byte
-	Write([]byte)
+	Read() (*MqObject, error)
+	Write([]byte) error
+	Delete(string) error
+}
+
+type MqObject struct {
+	Id      string
+	Message []byte
 }
 
 var agent MqAgent
@@ -18,7 +24,7 @@ func GetAgent() MqAgent {
 	if agent != nil {
 		return agent
 	} else {
-		config := utils.ConfigParam.Config
+		config := utils.ConfigParam.ExecutorConfig
 		mqType, ok := config["mq"].(string)
 		if !ok {
 			panic(&errors.MqNotConfiguredError{})
