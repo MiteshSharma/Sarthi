@@ -46,6 +46,7 @@ func (r *Reader) Start()  {
 				//work = &dao.Task{Id: "123", CallbackUrl: "https://www.google.com", CallbackMethod: "GET"}
 			case taskResponse:= <-r.response:
 				logs.Logger.Debug("Response of task received with id : "+taskResponse.Work.GetId())
+				source.GetSource().Delete(taskResponse.Work.GetId())
 			}
 		}
 	}()

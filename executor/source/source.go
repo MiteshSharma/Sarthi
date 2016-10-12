@@ -8,6 +8,7 @@ import (
 
 type Source interface  {
 	Get() work.Work
+	Delete(workId string) error
 }
 
 var source Source

@@ -28,3 +28,12 @@ func (mqs *MqSource) Get() work.Work  {
 	}
 	return &task
 }
+
+func (mqs *MqSource) Delete(workId string) error {
+	mq_agent := mq.GetAgent()
+	err := mq_agent.Delete(workId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
